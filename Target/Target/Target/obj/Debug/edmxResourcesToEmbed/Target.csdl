@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TargetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Costumer">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AreaCode" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
+    <Property Name="CVRNumnber" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Costumer__09A971A2" FromRole="Costumer" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="OrderLine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderLineProductId" Type="Int32" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="ProductCode" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__OrderLine__Order__2DE6D218" FromRole="OrderLine" ToRole="Orders" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__OrderLine__Produ__17036CC0" FromRole="OrderLine" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="CostumerId" Type="Int32" />
+    <NavigationProperty Name="Costumer" Relationship="Self.FK__Orders__Costumer__09A971A2" FromRole="Orders" ToRole="Costumer" />
+    <NavigationProperty Name="OrderLine" Relationship="Self.FK__OrderLine__Order__2DE6D218" FromRole="Orders" ToRole="OrderLine" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="ProductCode" Type="Int32" />
+    <Property Name="Price" Type="Int32" />
+    <NavigationProperty Name="OrderLine" Relationship="Self.FK__OrderLine__Produ__17036CC0" FromRole="Products" ToRole="OrderLine" />
+  </EntityType>
+  <Association Name="FK__Orders__Costumer__09A971A2">
+    <End Role="Costumer" Type="Self.Costumer" Multiplicity="0..1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Costumer">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="CostumerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderLine__Order__2DE6D218">
+    <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+    <End Role="OrderLine" Type="Self.OrderLine" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLine">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderLine__Produ__17036CC0">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="OrderLine" Type="Self.OrderLine" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLine">
+        <PropertyRef Name="ProductCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TargetEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Costumer" EntityType="Self.Costumer" />
+    <EntitySet Name="OrderLine" EntityType="Self.OrderLine" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" />
+    <EntitySet Name="Products" EntityType="Self.Products" />
+    <AssociationSet Name="FK__Orders__Costumer__09A971A2" Association="Self.FK__Orders__Costumer__09A971A2">
+      <End Role="Costumer" EntitySet="Costumer" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderLine__Order__2DE6D218" Association="Self.FK__OrderLine__Order__2DE6D218">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderLine" EntitySet="OrderLine" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderLine__Produ__17036CC0" Association="Self.FK__OrderLine__Produ__17036CC0">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="OrderLine" EntitySet="OrderLine" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
